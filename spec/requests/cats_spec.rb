@@ -51,9 +51,80 @@ RSpec.describe "Cats", type: :request do
       expect(cat.enjoys).to eq('Talking to snakes')
       expect(cat.image).to eq('https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM')
     end
+    it 'does not create a cat without a name' do
+      cat_params = {
+        cat: {
+
+          age: 6,
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      expect(json['name']).to include "can't be blank"
+    end
+    it 'does not create a cat without an age' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      expect(json['age']).to include "can't be blank"
+    end
+    it 'does not create a cat without an enjoys' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      expect(response).to have_http_status(422)
+      json =JSON.parse(response.body)
+      expect(json['enjoys']).to include "can't be blank"
+    end
+    it 'does not create a cat without enjoys being at least 10 characters long' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: 'Naps',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+
+      post '/cats', params: cat_params
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      expect(json['enjoys']).to include "is too short (minimum is 10 characters)"
+    end
+    it 'does not create a cat without an image' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: 'Talking to snakes',
+
+        }
+      }
+      post '/cats', params: cat_params
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      expect(json['image']).to include "can't be blank"
+    end
   end
   describe "PATCH /update" do
-    it 'makes cahnges to a cat' do
+    it 'makes changes to a cat' do
       # make a moc cat
       cat_params = {
         cat: {
@@ -85,6 +156,93 @@ RSpec.describe "Cats", type: :request do
       expect(updated_cat.name).to eq('Harry')
       expect(updated_cat.age).to eq(2)
       expect(updated_cat.enjoys).to eq('Receiving unearned brownie points')
+    end
+    it 'does not accept update if there is no name' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      cat = Cat.first
+      updated_cat_params = {
+        cat: {
+          name: nil,
+          age: 5,
+          enjoys: 'playing with yarn',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      patch "/cats/#{cat.id}", params: updated_cat_params
+      updated_cat = Cat.find(cat.id)
+
+      # asserting against the response code
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      p 'update does not have name'
+      p json['name']
+      expect(json['name']).to include "can't be blank"
+    end
+    it 'doesnt update a cat without an age' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      cat = Cat.first
+      updated_cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: nil,
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      patch "/cats/#{cat.id}", params: updated_cat_params
+      updated_cat = Cat.find(cat.id)
+
+      # asserting against the response code
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      p 'update does not have age'
+      p json['age']
+      expect(json['age']).to include "can't be blank"
+    end
+    it 'doesnt update a cat without an enjoys' do
+      cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: 'Talking to snakes',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      post '/cats', params: cat_params
+      cat = Cat.first
+      updated_cat_params = {
+        cat: {
+          name: 'Voldemort',
+          age: 6,
+          enjoys: nil,
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
+        }
+      }
+      patch "/cats/#{cat.id}", params: updated_cat_params
+      updated_cat = Cat.find(cat.id)
+
+      # asserting against the response code
+      expect(response).to have_http_status(422)
+      json = JSON.parse(response.body)
+      p 'update without a enjoys'
+      p json['enjoys']
+      expect(json['enjoys']).to include "can't be blank"
     end
   end
 
