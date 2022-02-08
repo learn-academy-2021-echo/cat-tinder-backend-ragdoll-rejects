@@ -18,7 +18,7 @@ RSpec.describe Cat, type: :model do
     expect(cat.errors[:image]).to_not be_empty
   end
   it 'should validate that enjoys is at least 10 characters' do
-  cat = Cat.create enjoys:"Naps"
-  expect(cat.errors[:enjoys]).to_not be_empty
-end
+    cat = Cat.create enjoys:"Naps"
+    expect(cat.errors[:enjoys]).to_not be_empty
+  end
 end

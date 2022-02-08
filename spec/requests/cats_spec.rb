@@ -63,7 +63,6 @@ RSpec.describe "Cats", type: :request do
       post '/cats', params: cat_params
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      p json['name']
       expect(json['name']).to include "can't be blank"
     end
     it 'does not create a cat without an age' do
@@ -78,7 +77,6 @@ RSpec.describe "Cats", type: :request do
       post '/cats', params: cat_params
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      p json['age']
       expect(json['age']).to include "can't be blank"
     end
     it 'does not create a cat without an enjoys' do
@@ -93,7 +91,6 @@ RSpec.describe "Cats", type: :request do
       post '/cats', params: cat_params
       expect(response).to have_http_status(422)
       json =JSON.parse(response.body)
-      p json['enjoys']
       expect(json['enjoys']).to include "can't be blank"
     end
     it 'does not create a cat without enjoys being at least 10 characters long' do
@@ -109,7 +106,6 @@ RSpec.describe "Cats", type: :request do
       post '/cats', params: cat_params
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      p json['enjoys']
       expect(json['enjoys']).to include "is too short (minimum is 10 characters)"
     end
     it 'does not create a cat without an image' do
@@ -124,7 +120,6 @@ RSpec.describe "Cats", type: :request do
       post '/cats', params: cat_params
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      p json['image']
       expect(json['image']).to include "can't be blank"
     end
   end
@@ -177,7 +172,8 @@ RSpec.describe "Cats", type: :request do
         cat: {
           name: nil,
           age: 5,
-          enjoys: 'playing with yarn'
+          enjoys: 'playing with yarn',
+          image: 'https://www.google.com/search?q=black+cat+jpg&tbm=isch&ved=2ahUKEwjx25Kh3Ob1AhWfAjQIHdgaCqQQ2-cCegQIABAA&oq=black+cat+jpg&gs_lcp=CgNpbWcQAzIFCAAQgAQ6BwgjEO8DECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgYIABAKEBhQrSxY8kVgm0hoAHAAeACAAZIBiAGdDpIBBDAuMTSYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=J3b9YbGsIJ-F0PEP2LWooAo&bih=853&biw=1600#imgrc=FJMEVJFcH_6fZM'
         }
       }
       patch "/cats/#{cat.id}", params: updated_cat_params
